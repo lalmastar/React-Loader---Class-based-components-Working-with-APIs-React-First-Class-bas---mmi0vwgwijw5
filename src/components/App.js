@@ -20,7 +20,17 @@ const App = () => {
     webiste: "",
   });
 
-  const handleOnClick = () => {};
+  const handleOnClick = () => {
+    setIsLoading(LoadingStatus.IN_PROGRESS);
+    fetch(`${BASE_URL}/${userId}`).then(res => res.json())
+    .then(data => {
+      setTimeout(() => {
+        console.log(data);
+        setIsLoading(LoadingStatus.SUCCESS);
+        setUserData(data);
+      }, 2000);
+    })
+  };
 
   const onChangeHandler = (event) => {
     setUserId(event.target.value);
@@ -40,15 +50,16 @@ const App = () => {
       <button id="btn" onClick={handleOnClick}>
         Get User
       </button>
+      {isLoading===LoadingStatus.IN_PROGRESS && <Loader />}
 
-      <div id="data">
+      {isLoading===LoadingStatus.SUCCESS && <div id="data">
         <h1>Click on the button to get the user</h1>
         <h4 id="id">{userData.id}</h4>
         <h4 id="email">{userData.email}</h4>
         <h4 id="name">{userData.name}</h4>
         <h4 id="phone">{userData.phone}</h4>
         <h4 id="website">{userData.website}</h4>
-      </div>
+      </div>}
     </div>
   );
 };
